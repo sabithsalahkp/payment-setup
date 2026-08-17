@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#ffffff" />
+  <title>UPI Payment Check</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:#f5f7fb;
+      color:#17191f;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:20px;
+    }
+    .card{
+      width:min(100%,420px);
+      background:#fff;
+      border:1px solid #e8eaf0;
+      border-radius:22px;
+      padding:24px;
+      box-shadow:0 16px 50px rgba(21,27,38,.09);
+    }
+    h1{font-size:26px;margin:0 0 8px}
+    .sub{color:#6f7580;margin:0 0 22px;line-height:1.5}
+    .info{
+      background:#f6f7fa;
+      border-radius:15px;
+      padding:14px 16px;
+      margin-bottom:18px;
+    }
+    .info small{display:block;color:#7b818c;margin-bottom:4px}
+    .info strong{font-size:15px;word-break:break-all}
+    label{display:block;font-size:13px;font-weight:700;margin-bottom:8px}
+    .amount{
+      display:flex;
+      align-items:center;
+      border:1px solid #dfe3ea;
+      border-radius:15px;
+      padding:0 15px;
+    }
+    .amount span{font-size:21px;font-weight:800}
+    .amount input{
+      width:100%;
+      border:0;
+      outline:0;
+      padding:15px 9px;
+      font-size:21px;
+      font-weight:800;
+      background:transparent;
+    }
+    button{
+      width:100%;
+      border:0;
+      border-radius:15px;
+      padding:16px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .gpay{margin-top:14px;background:#17191f;color:white}
+    .upi{margin-top:10px;background:#eef1f5;color:#17191f}
+    .note{
+      margin-top:17px;
+      font-size:12px;
+      line-height:1.55;
+      color:#7a808b;
+    }
+    .preview{
+      margin-top:15px;
+      padding-top:14px;
+      border-top:1px solid #edf0f4;
+      font-size:11px;
+      color:#8a909c;
+      word-break:break-all;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>UPI Payment Check</h1>
+    <p class="sub">Temporary page for testing direct UPI and Google Pay opening.</p>
+
+    <div class="info">
+      <small>Receiver UPI ID</small>
+      <strong>paytm.s3hc53w@pty</strong>
+    </div>
+
+    <label for="amount">Amount</label>
+    <div class="amount">
+      <span>₹</span>
+      <input id="amount" type="number" inputmode="decimal" min="1" step="1" value="1">
+    </div>
+
+    <button class="gpay" id="gpayBtn">Pay with Google Pay</button>
+    <button class="upi" id="upiBtn">Open UPI App</button>
+
+    <div class="note">
+      For testing only. Open this page in Android Chrome with Google Pay installed.
+    </div>
+
+    <div class="preview" id="preview"></div>
+  </main>
+
+<script>
+const VPA = "paytm.s3hc53w@pty";
+const PAYEE_NAME = "Paytm";
+const NOTE = "Verified Paytm Merchant";
+const GPayPackage = "com.google.android.apps.nbu.paisa.user";
+
+function amount() {
+  const n = Number(document.getElementById("amount").value || 0);
+  return n > 0 ? n.toFixed(2) : "1.00";
+}
+
+function query() {
+  return new URLSearchParams({
+    pa: VPA,
+    pn: PAYEE_NAME,
+    tn: NOTE,
+    am: amount(),
+    cu: "INR"
+  }).toString();
+}
+
+function upiUrl() {
+  return "upi://pay?" + query();
+}
+
+function gpayUrl() {
+  return "intent://pay?" + query() +
+    "#Intent;scheme=upi;package=" + GPayPackage + ";end";
+}
+
+function refresh() {
+  document.getElementById("preview").textContent = upiUrl();
+}
+
+document.getElementById("amount").addEventListener("input", refresh);
+
+document.getElementById("gpayBtn").addEventListener("click", () => {
+  window.location.href = gpayUrl();
+});
+
+document.getElementById("upiBtn").addEventListener("click", () => {
+  window.location.href = upiUrl();
+});
+
+refresh();
+</script>
+</body>
+</html>
