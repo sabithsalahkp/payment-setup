@@ -1,57 +1,60 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UPI Diagnostic</title>
-<style>
-body{font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f5f6f8;margin:0;padding:22px;color:#17191f}
-.card{max-width:430px;margin:30px auto;background:#fff;border:1px solid #e5e7eb;border-radius:20px;padding:22px;box-shadow:0 12px 35px rgba(0,0,0,.08)}
-h1{font-size:24px;margin:0 0 8px}.sub{color:#6b7280;font-size:14px;line-height:1.5;margin-bottom:18px}
-button{width:100%;border:0;border-radius:14px;padding:15px;margin:7px 0;font-size:15px;font-weight:750;cursor:pointer;background:#111827;color:#fff}
-button.alt{background:#eef1f5;color:#111827}
-small{display:block;color:#6b7280;line-height:1.5;margin-top:15px}
-code{word-break:break-all;font-size:11px}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UPI Link Test</title>
+  <style>
+    body {
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,sans-serif;
+      background:#f5f6f8;
+      padding:20px;
+      color:#17191f;
+    }
+    .card {
+      width:min(100%,420px);
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:20px;
+      padding:24px;
+      box-shadow:0 14px 40px rgba(0,0,0,.08);
+      text-align:center;
+    }
+    h1 { margin:0 0 8px; font-size:24px; }
+    p { color:#6b7280; line-height:1.5; }
+    .pay {
+      display:block;
+      margin-top:20px;
+      padding:16px 18px;
+      border-radius:14px;
+      background:#111827;
+      color:#fff;
+      text-decoration:none;
+      font-size:17px;
+      font-weight:800;
+    }
+    code {
+      display:block;
+      margin-top:18px;
+      font-size:11px;
+      color:#7b8190;
+      word-break:break-all;
+      text-align:left;
+    }
+  </style>
 </head>
 <body>
-<div class="card">
-<h1>UPI Diagnostic</h1>
-<p class="sub">Tap these in order on Android Chrome. Stop at the first one that gives the receiver/VPA error.</p>
+  <main class="card">
+    <h1>UPI Link Test</h1>
+    <p>This button is a plain HTML link using the exact same payment URI as the working QR.</p>
 
-<button onclick="go(1)">1. VPA only</button>
-<button class="alt" onclick="go(2)">2. VPA + Sabith Salah K P</button>
-<button class="alt" onclick="go(3)">3. Exact Paytm QR data</button>
-<button class="alt" onclick="go(4)">4. Force Google Pay</button>
+    <a class="pay" href="upi://pay?pa=paytm.s3hc53w@pty&pn=Paytm&tn=Verified%20Paytm%20Merchant&am=49.00&cu=INR">Pay ₹49</a>
 
-<small>
-VPA: <code>paytm.s3hc53w@pty</code><br><br>
-Test with ₹1 only after the receiver screen appears. These first tests intentionally do not force an amount, matching the Paytm QR more closely.
-</small>
-</div>
-
-<script>
-const vpa = "paytm.s3hc53w@pty";
-
-function go(n){
-  let url;
-  if(n===1){
-    url = "upi://pay?pa=" + encodeURIComponent(vpa);
-  } else if(n===2){
-    url = "upi://pay?pa=" + encodeURIComponent(vpa)
-        + "&pn=" + encodeURIComponent("Sabith Salah K P");
-  } else if(n===3){
-    url = "upi://pay?pa=" + encodeURIComponent(vpa)
-        + "&pn=" + encodeURIComponent("Paytm")
-        + "&tn=" + encodeURIComponent("Verified Paytm Merchant");
-  } else {
-    const q = "pa=" + encodeURIComponent(vpa)
-        + "&pn=" + encodeURIComponent("Sabith Salah K P");
-    url = "intent://pay?" + q
-        + "#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end";
-  }
-  window.location.href = url;
-}
-</script>
+    <code>upi://pay?pa=paytm.s3hc53w@pty&pn=Paytm&tn=Verified%20Paytm%20Merchant&am=49.00&cu=INR</code>
+  </main>
 </body>
 </html>
